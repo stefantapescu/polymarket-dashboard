@@ -1,9 +1,9 @@
 {
   "mode": "LIVE",
   "started_at": "2026-02-21T05:39:19.630211+00:00",
-  "updated_at": "2026-02-21T15:34:14.206988+00:00",
-  "cycle_count": 6863,
-  "rebalance_count": 572,
+  "updated_at": "2026-02-21T15:39:26.671531+00:00",
+  "cycle_count": 6923,
+  "rebalance_count": 577,
   "total_fills": 1,
   "alerts": [
     {
@@ -28,8 +28,8 @@
       "no_bid": 0.62,
       "yes_size": 104,
       "no_size": 104,
-      "yes_order_id": "0xf13be333098a639ff792fa055c42b09abf7da219a7c918334b07dd2d9b7a49c7",
-      "no_order_id": "0xee59559308303c175d94d6e52dda8cc5fd30e620184fa9a733908f9b9e614ee2",
+      "yes_order_id": "0x5b5a7503f924223ea66f31af207c3a828e23027d26a8a11c72850cf897540579",
+      "no_order_id": "0x4d967445a4a9711d317c2fe92c0942e8a1ed5fe94cec70932df2c4bb469c84d2",
       "yes_filled": 0,
       "no_filled": 0.0,
       "yes_spent": 0,
@@ -38,7 +38,7 @@
       "no_scoring": true,
       "cost": 99.84,
       "reward_rate": 200,
-      "last_update": 1771687990.740769
+      "last_update": 1771688303.763702
     },
     "Ruzevich IL-06": {
       "yes_bid": 0.07,
