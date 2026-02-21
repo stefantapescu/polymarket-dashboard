@@ -16833,7 +16833,7 @@
       "up_ask": 0.52,
       "dn_ask": 0.58,
       "winner": null,
-      "resolved": false,
+      "resolved": true,
       "v_E": {
         "action": "BN_STRONG",
         "dir": "",
@@ -16857,6 +16857,50 @@
         "winner": null,
         "pnl": 0,
         "reason": "|BN|=5.0 > 4.5 (too strong)"
+      }
+    },
+    {
+      "slug": "btc-updown-5m-1771692900",
+      "ws": 1771692900,
+      "bn_strike": 68350.5,
+      "w1_up": 29.6093,
+      "w1_dn": 186.925,
+      "w1_lean": 0.8633,
+      "w2_up": 77.7801,
+      "w2_dn": 365.7301,
+      "w2_lean": 0.8246,
+      "bn_bps": -4.08,
+      "up_ask": 0.11,
+      "dn_ask": 0.91,
+      "winner": null,
+      "resolved": false,
+      "v_E": {
+        "action": "BN_STRONG",
+        "dir": "",
+        "mode": "reversal",
+        "ask": 0,
+        "cost": 0,
+        "tokens": 0,
+        "bn_bps": -4.08,
+        "winner": null,
+        "pnl": 0,
+        "reason": "|BN|=4.1 > 4.0 (too strong)"
+      },
+      "v_G": {
+        "action": "TRADE",
+        "mode": "reversal",
+        "dir": "Up",
+        "ask": 0.11,
+        "cost": 1.0,
+        "tokens": 9.0691,
+        "token_id": "54201666447532585179677677120069574728314642427294520489751538074136858523118",
+        "bn_bps": -4.08,
+        "live": true,
+        "tp_order_id": "0x6b166f637124d1328472ea756d5aa9995e48a1d9a20fe41662ba65498c59d069",
+        "tp_price": 0.93,
+        "tp_filled": false,
+        "winner": null,
+        "pnl": 0
       }
     }
   ],
@@ -17055,6 +17099,7 @@
     "btc-updown-5m-1771608600",
     "btc-updown-5m-1771689300",
     "btc-updown-5m-1771683000",
+    "btc-updown-5m-1771692900",
     "btc-updown-5m-1771667100",
     "btc-updown-5m-1771636500",
     "btc-updown-5m-1771593300",
@@ -17288,7 +17333,7 @@
       "losses": 92,
       "trades": 98,
       "pnl": -17.343000000000004,
-      "bn_gate": 142,
+      "bn_gate": 143,
       "skips": 5,
       "no_signal": 0
     },
@@ -17311,5 +17356,5 @@
       "bn_gate": 84
     }
   },
-  "updated_at": 1771692840.642146
+  "updated_at": 1771693140.840236
 }
