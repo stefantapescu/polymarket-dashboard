@@ -15772,8 +15772,8 @@
       "bn_bps": -7.54,
       "up_ask": 0.07,
       "dn_ask": 0.94,
-      "winner": null,
-      "resolved": false,
+      "winner": "Down",
+      "resolved": true,
       "v_E": {
         "action": "TRADE",
         "mode": "reversal",
@@ -15787,8 +15787,8 @@
         "tp_order_id": null,
         "tp_price": null,
         "tp_filled": false,
-        "winner": null,
-        "pnl": 0
+        "winner": "Down",
+        "pnl": -0.875
       },
       "v_G": {
         "action": "BN_STRONG",
@@ -15801,6 +15801,54 @@
         "winner": null,
         "pnl": 0,
         "reason": "|BN|=7.5 > 4.5 (too strong)"
+      }
+    },
+    {
+      "slug": "btc-updown-5m-1771685400",
+      "ws": 1771685400,
+      "bn_strike": 68480.43,
+      "w1_up": 1161.8044,
+      "w1_dn": 202.814,
+      "w1_lean": 0.8514,
+      "w2_up": 17.4471,
+      "w2_dn": 87.8806,
+      "w2_lean": 0.8344,
+      "bn_bps": 4.19,
+      "up_ask": 0.93,
+      "dn_ask": 0.08,
+      "winner": null,
+      "resolved": false,
+      "v_E": {
+        "action": "TRADE",
+        "mode": "reversal",
+        "dir": "Down",
+        "ask": 0.08,
+        "cost": 0.6672,
+        "tokens": 11.12,
+        "token_id": "109945867285342191422988655112495564732120309932012036144505987128131787689378",
+        "bn_bps": 4.19,
+        "live": true,
+        "tp_order_id": null,
+        "tp_price": null,
+        "tp_filled": false,
+        "winner": null,
+        "pnl": 0
+      },
+      "v_G": {
+        "action": "TRADE",
+        "mode": "reversal",
+        "dir": "Down",
+        "ask": 0.08,
+        "cost": 0.6672,
+        "tokens": 11.12,
+        "token_id": "109945867285342191422988655112495564732120309932012036144505987128131787689378",
+        "bn_bps": 4.19,
+        "live": true,
+        "tp_order_id": null,
+        "tp_price": null,
+        "tp_filled": false,
+        "winner": null,
+        "pnl": 0
       }
     }
   ],
@@ -16139,6 +16187,7 @@
     "btc-updown-5m-1771663800",
     "btc-updown-5m-1771642500",
     "btc-updown-5m-1771671000",
+    "btc-updown-5m-1771685400",
     "btc-updown-5m-1771577100",
     "btc-updown-5m-1771600200",
     "btc-updown-5m-1771612800",
@@ -16204,9 +16253,9 @@
     },
     "E": {
       "wins": 6,
-      "losses": 82,
-      "trades": 88,
-      "pnl": -8.735400000000004,
+      "losses": 83,
+      "trades": 89,
+      "pnl": -9.610400000000004,
       "bn_gate": 126,
       "skips": 5,
       "no_signal": 0
@@ -16230,5 +16279,5 @@
       "bn_gate": 64
     }
   },
-  "updated_at": 1771685341.0144022
+  "updated_at": 1771685641.1532428
 }
