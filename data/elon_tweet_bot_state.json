@@ -1,8 +1,8 @@
 {
   "budget": 75.0,
-  "spent": 73.1137538002635,
-  "total_pnl": 27.86873015873016,
-  "cycle_count": 7,
+  "spent": 86.11,
+  "total_pnl": 28.96,
+  "cycle_count": 8,
   "positions": [
     {
       "event_slug": "elon-musk-of-tweets-february-13-february-20",
@@ -141,8 +141,8 @@
       "size_tokens": 53.57142857142857,
       "our_prob_at_entry": 0.495,
       "timestamp": 1771664124.077548,
-      "resolved": true,
-      "pnl": -0.5357142857142847
+      "resolved": false,
+      "pnl": 0.0
     },
     {
       "event_slug": "donald-trump-of-truth-social-posts-february-17-february-24",
@@ -155,8 +155,8 @@
       "size_tokens": 27.77777777777778,
       "our_prob_at_entry": 0.495,
       "timestamp": 1771664124.0775712,
-      "resolved": true,
-      "pnl": -0.5555555555555554
+      "resolved": false,
+      "pnl": 0.0
     },
     {
       "event_slug": "elon-musk-of-tweets-february-21-february-23",
@@ -183,48 +183,6 @@
       "size_tokens": 100.0,
       "our_prob_at_entry": 0.173,
       "timestamp": 1771664124.077595,
-      "resolved": false,
-      "pnl": 0.0
-    },
-    {
-      "event_slug": "donald-trump-of-truth-social-posts-february-20-february-27",
-      "bracket_slug": "donald-trump-of-truth-social-posts-february-20-february-27-120-139",
-      "bracket_label": "120-139",
-      "side": "No",
-      "token_id": "86319227097189308417967333618619512410603877080073902408777625383700083181903",
-      "entry_price": 0.73,
-      "size_usd": 6.21073270247477,
-      "size_tokens": 8.507853017088726,
-      "our_prob_at_entry": 0.9920412820445875,
-      "timestamp": 1771690482.415478,
-      "resolved": false,
-      "pnl": 0.0
-    },
-    {
-      "event_slug": "donald-trump-of-truth-social-posts-february-20-february-27",
-      "bracket_slug": "donald-trump-of-truth-social-posts-february-20-february-27-100-119",
-      "bracket_label": "100-119",
-      "side": "No",
-      "token_id": "43883752226282295094381052709375456611595077857678899560443603056200489350845",
-      "entry_price": 0.75,
-      "size_usd": 2.8411932902517427,
-      "size_tokens": 3.788257720335657,
-      "our_prob_at_entry": 0.9656340609659766,
-      "timestamp": 1771690482.5440278,
-      "resolved": false,
-      "pnl": 0.0
-    },
-    {
-      "event_slug": "donald-trump-of-truth-social-posts-february-20-february-27",
-      "bracket_slug": "donald-trump-of-truth-social-posts-february-20-february-27-140-159",
-      "bracket_label": "140-159",
-      "side": "No",
-      "token_id": "76064277191901289845061368316036469035669406286698398951556026234395086792251",
-      "entry_price": 0.82,
-      "size_usd": 1.8605579662671325,
-      "size_tokens": 2.2689731295940643,
-      "our_prob_at_entry": 0.9987659130769517,
-      "timestamp": 1771690482.7148101,
       "resolved": false,
       "pnl": 0.0
     }
@@ -449,76 +407,10 @@
       "model_prob": 0.173,
       "model_type": "volatility_analysis",
       "live": true
-    },
-    {
-      "time": "2026-02-21T17:14:40.939386",
-      "action": "SELL_THESIS_DEAD",
-      "bracket": "120-139",
-      "price": 0.27,
-      "size_usd": 14.464285714285715,
-      "tokens": 53.57142857142857,
-      "edge": 0.0,
-      "model_prob": 0.007960460961327409,
-      "model_type": "bayesian",
-      "live": false,
-      "entry_price": 0.28,
-      "pnl": -0.5357142857142847,
-      "token_id": "109576981521765219819928264855187504586335320965255735943919329434218836277523"
-    },
-    {
-      "time": "2026-02-21T17:14:41.373809",
-      "action": "SELL_THESIS_DEAD",
-      "bracket": "120-139",
-      "price": 0.34,
-      "size_usd": 9.444444444444445,
-      "tokens": 27.77777777777778,
-      "edge": 0.0,
-      "model_prob": 0.0,
-      "model_type": "bayesian",
-      "live": false,
-      "entry_price": 0.36,
-      "pnl": -0.5555555555555554,
-      "token_id": "61995453283690250687279259421345912901107517083687313592875510674943978114290"
-    },
-    {
-      "time": "2026-02-21T17:14:42.415487",
-      "action": "BUY_NO",
-      "bracket": "120-139",
-      "price": 0.73,
-      "size_usd": 6.21073270247477,
-      "tokens": 8.507853017088726,
-      "edge": 0.26204128204458754,
-      "model_prob": 0.9920412820445875,
-      "model_type": "bayesian",
-      "live": false
-    },
-    {
-      "time": "2026-02-21T17:14:42.544041",
-      "action": "BUY_NO",
-      "bracket": "100-119",
-      "price": 0.75,
-      "size_usd": 2.8411932902517427,
-      "tokens": 3.788257720335657,
-      "edge": 0.2156340609659766,
-      "model_prob": 0.9656340609659766,
-      "model_type": "bayesian",
-      "live": false
-    },
-    {
-      "time": "2026-02-21T17:14:42.714817",
-      "action": "BUY_NO",
-      "bracket": "140-159",
-      "price": 0.82,
-      "size_usd": 1.8605579662671325,
-      "tokens": 2.2689731295940643,
-      "edge": 0.17876591307695178,
-      "model_prob": 0.9987659130769517,
-      "model_type": "bayesian",
-      "live": false
     }
   ],
-  "total_sells": 2,
-  "total_sell_proceeds": 23.908730158730158,
-  "capital_turns": 0.3187830687830688,
-  "saved_at": 1771690482.7149818
+  "total_sells": 0,
+  "total_sell_proceeds": 0.0,
+  "capital_turns": 0.0,
+  "saved_at": 1771691354.2702458
 }
