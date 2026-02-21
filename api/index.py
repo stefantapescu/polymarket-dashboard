@@ -76,8 +76,10 @@ def load_v4_reversal():
         "G": "Rev Tight (|BN| 3-4.5)",
     }
 
+    # Only show active variants
+    active_variants = ["E", "G"]
     for vk, vs in state.get("variants", {}).items():
-        if vs.get("trades", 0) == 0 and vs.get("bn_gate", 0) == 0:
+        if vk not in active_variants:
             continue
         bot["variants"][vk] = {
             "name": variant_names.get(vk, f"V{vk}"),
@@ -88,8 +90,11 @@ def load_v4_reversal():
             "skips": vs.get("skips", 0) + vs.get("bn_gate", 0),
         }
 
+    # Only show active variants (E + G), not retired A-D/F
+    active_variants = ["E", "G"]
+
     for w in state.get("windows", []):
-        for vk in ["A", "B", "C", "D", "E", "F", "G"]:
+        for vk in active_variants:
             vt = w.get(f"v_{vk}", {})
             if vt.get("action") != "TRADE":
                 continue
