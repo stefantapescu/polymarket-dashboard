@@ -35,6 +35,11 @@ BOT_REGISTRY = {
         "desc": "Models Elon Musk tweet frequency with Normal(VMR=16) distribution, buys mispriced tweet-count brackets",
         "icon": "🐦",
     },
+    "v21": {
+        "name": "V21 BN-Momentum Rebalancer",
+        "desc": "BTC 5-min rebalancer: 80% BN momentum + maker orders, $3K/window",
+        "icon": "BN",
+    },
 }
 
 # ──────────────────────────────────────────────────────────────────────
@@ -226,9 +231,129 @@ def load_candidate2():
     return bot
 
 
+def load_v21_rebalancer():
+    state = load_json(DATA_DIR / "rebalancer_v21_dashboard.json")
+    if not state:
+        return None
+
+    windows = state.get("windows", [])
+    resolved = [w for w in windows if w.get("resolved") and w.get("won_side")]
+    active = [w for w in windows if not w.get("resolved")]
+
+    # Direction accuracy
+    dir_correct = [w for w in resolved if w.get("lean", "").upper() == w.get("won_side", "").upper()]
+    dir_wrong = [w for w in resolved if w.get("lean", "").upper() != w.get("won_side", "").upper()
+                 and w.get("lean", "").upper() not in ("", "BALANCED")]
+
+    # P&L win/loss
+    wins = [w for w in resolved if w.get("pnl_usd", 0) > 0]
+    losses = [w for w in resolved if w.get("pnl_usd", 0) <= 0]
+
+    # VWAP stats
+    vwaps = [w["combined_vwap"] for w in resolved if w.get("combined_vwap", 0) > 0]
+    avg_vwap = sum(vwaps) / len(vwaps) if vwaps else 0
+
+    # Maker stats
+    total_maker = sum(w.get("maker_trades", 0) for w in windows)
+    total_taker = sum(w.get("taker_trades", 0) for w in windows)
+    total_all = total_maker + total_taker
+    maker_fill_rate = total_maker / total_all * 100 if total_all > 0 else 0
+    total_fee_savings = sum(w.get("fee_savings", 0) for w in windows)
+
+    # Effective budget
+    eff_budgets = [w.get("effective_budget", 0) for w in resolved if w.get("effective_budget", 0) > 0]
+    avg_eff_budget = sum(eff_budgets) / len(eff_budgets) if eff_budgets else 0
+
+    total_pnl = sum(w.get("pnl_usd", 0) for w in resolved)
+
+    # Signal analysis
+    correct_win = sum(1 for w in resolved
+                      if w.get("lean", "").upper() == w.get("won_side", "").upper()
+                      and w.get("pnl_usd", 0) > 0)
+    correct_loss = sum(1 for w in resolved
+                       if w.get("lean", "").upper() == w.get("won_side", "").upper()
+                       and w.get("pnl_usd", 0) <= 0)
+    wrong_loss = sum(1 for w in resolved
+                     if w.get("lean", "").upper() != w.get("won_side", "").upper()
+                     and w.get("lean", "").upper() not in ("", "BALANCED"))
+
+    # BN momentum buckets
+    bn_buckets = []
+    for lo, hi, label in [(0, 3, "0-3"), (3, 5, "3-5"), (5, 7, "5-7"),
+                           (7, 10, "7-10"), (10, 15, "10-15"), (15, 100, "15+")]:
+        bw_list = [w for w in resolved if lo <= w.get("max_bn_bps", 0) < hi]
+        bw = sum(1 for w in bw_list
+                 if w.get("lean", "").upper() == w.get("won_side", "").upper())
+        bl = len(bw_list) - bw
+        bp = sum(w.get("pnl_usd", 0) for w in bw_list)
+        bwr = bw / (bw + bl) * 100 if (bw + bl) > 0 else 0
+        bn_buckets.append(dict(label=label, wins=bw, losses=bl, pnl=bp, wr=bwr, total=bw + bl))
+
+    # Cumulative P&L
+    sorted_resolved = sorted(resolved, key=lambda w: w.get("window_start", 0))
+    cum = 0
+    cum_pnl = []
+    for w in sorted_resolved:
+        cum += w.get("pnl_usd", 0)
+        cum_pnl.append(dict(cum=round(cum, 2), pnl=round(w.get("pnl_usd", 0), 2),
+                            idx=len(cum_pnl) + 1))
+
+    # Maker windows for detail table
+    maker_windows = []
+    for w in windows:
+        mt = w.get("maker_trades", 0)
+        tt = w.get("taker_trades", 0)
+        if mt + tt > 0:
+            maker_windows.append({
+                "slug": w["slug"], "n_trades": mt + tt,
+                "maker": mt, "taker": tt,
+                "maker_pct": w.get("maker_pct", 0),
+                "fee_savings": w.get("fee_savings", 0),
+            })
+
+    dir_total = len(dir_correct) + len(dir_wrong)
+    bot = {
+        "id": "v21",
+        "name": BOT_REGISTRY["v21"]["name"],
+        "desc": BOT_REGISTRY["v21"]["desc"],
+        "icon": BOT_REGISTRY["v21"]["icon"],
+        "file": "bot/rebalancer_v21.py",
+        "mode": "SIM",
+        "variants": {},
+        "trades": [],
+        "summary": {
+            "total_pnl": round(total_pnl, 2),
+            "wins": len(wins),
+            "losses": len(losses),
+            "resolved": len(resolved),
+            "pending": len(active),
+            "total_trades": len(resolved) + len(active),
+            "dir_accuracy": round(len(dir_correct) / dir_total * 100, 1) if dir_total > 0 else 0,
+            "dir_correct": len(dir_correct),
+            "dir_wrong": len(dir_wrong),
+            "avg_vwap": round(avg_vwap, 4),
+            "maker_fill_rate": round(maker_fill_rate, 1),
+            "total_fee_savings": round(total_fee_savings, 2),
+            "avg_eff_budget": round(avg_eff_budget, 0),
+            "budget": state.get("budget", 0),
+            "available": state.get("available", 0),
+            "windows_seen": state.get("windows_seen", 0),
+            "correct_win": correct_win,
+            "correct_loss": correct_loss,
+            "wrong_loss": wrong_loss,
+            "avg_bet": round(sum(w.get("total_usd", 0) for w in resolved) / len(resolved), 2) if resolved else 0,
+        },
+        "v21_windows": sorted(windows, key=lambda w: w.get("window_start", 0), reverse=True),
+        "v21_bn_buckets": bn_buckets,
+        "v21_cum_pnl": cum_pnl,
+        "v21_maker_windows": maker_windows,
+    }
+    return bot
+
+
 def load_all_bots():
     bots = []
-    for loader in [load_v4_reversal, load_polymanager, load_candidate2]:
+    for loader in [load_v4_reversal, load_polymanager, load_candidate2, load_v21_rebalancer]:
         bot = loader()
         if bot:
             bots.append(bot)
@@ -490,6 +615,27 @@ HOME_TEMPLATE = """
                 <span>Trade #1</span>
                 <span>Current: <strong class="{{ 'green' if cum_pnl[-1].cum >= 0 else 'red' }}">${{ "%.2f"|format(cum_pnl[-1].cum) }}</strong></span>
                 <span>Trade #{{ cum_pnl|length }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if v21_cum_pnl %}
+    <div class="section">
+        <div class="section-header"><h2>V21 Rebalancer -- Cumulative P&L</h2></div>
+        <div class="chart-container">
+            <div class="bar-chart">
+                {% for pt in v21_cum_pnl %}
+                {% set h = ((pt.cum / v21_max_cum * 80)|int)|abs if v21_max_cum > 0 else 1 %}
+                <div class="bar {{ 'bar-green' if pt.cum >= 0 else 'bar-red' }}"
+                     style="height: {{ h if h > 0 else 1 }}px; flex: 1;"
+                     title="Window #{{ pt.idx }}: P&L ${{ pt.pnl }}, Cum ${{ pt.cum }}"></div>
+                {% endfor %}
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.7em; color:var(--text2); margin-top:4px;">
+                <span>Window #1</span>
+                <span>Current: <strong class="{{ 'green' if v21_cum_pnl[-1].cum >= 0 else 'red' }}">${{ "%.2f"|format(v21_cum_pnl[-1].cum) }}</strong></span>
+                <span>Window #{{ v21_cum_pnl|length }}</span>
             </div>
         </div>
     </div>
@@ -784,6 +930,233 @@ BOT_TEMPLATE = """
 """
 
 
+V21_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ bot.name }} -- Dashboard</title>
+<style>""" + SHARED_CSS + """
+.signal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+.signal-item { background: var(--bg3); border-radius: 6px; padding: 12px; text-align: center; }
+.signal-item .label { font-size: 0.65em; color: var(--text2); text-transform: uppercase;
+                      letter-spacing: 1px; margin-bottom: 4px; }
+.signal-item .val { font-size: 1.4em; font-weight: 700; }
+</style>
+</head><body>
+""" + NAV_HTML + """
+<div class="container">
+    <h1>{{ bot.icon }} {{ bot.name }}</h1>
+    <p class="subtitle">{{ bot.desc }} -- {{ bot.file }} -- {{ now }}</p>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Net P&L</h3>
+            <div class="value {{ 'green' if s.total_pnl >= 0 else 'red' }}">
+                ${{ "%.2f"|format(s.total_pnl) }}
+            </div>
+            <div class="sub">{{ s.windows_seen }} windows traded</div>
+        </div>
+        <div class="card">
+            <h3>Win Rate (P&L)</h3>
+            {% set wr = (s.wins / s.resolved * 100) if s.resolved > 0 else 0 %}
+            <div class="value {{ 'green' if wr > 50 else 'yellow' }}">{{ "%.1f"|format(wr) }}%</div>
+            <div class="sub">{{ s.wins }}W / {{ s.losses }}L</div>
+        </div>
+        <div class="card">
+            <h3>Direction Accuracy</h3>
+            <div class="value {{ 'green' if s.dir_accuracy > 65 else 'yellow' }}">
+                {{ "%.1f"|format(s.dir_accuracy) }}%
+            </div>
+            <div class="sub">{{ s.dir_correct }} correct / {{ s.dir_wrong }} wrong</div>
+        </div>
+        <div class="card">
+            <h3>Avg VWAP Ratio</h3>
+            <div class="value {{ 'green' if s.avg_vwap < 1.0 else 'yellow' if s.avg_vwap < 1.05 else 'red' }}">
+                {{ "%.4f"|format(s.avg_vwap) }}
+            </div>
+            <div class="sub">{{ '< 1.0 = profit' if s.avg_vwap < 1.0 else '> 1.0 = spread cost' }}</div>
+        </div>
+        <div class="card">
+            <h3>Maker Fill Rate</h3>
+            <div class="value blue">{{ "%.1f"|format(s.maker_fill_rate) }}%</div>
+            <div class="sub">Zero fee + 20% rebate</div>
+        </div>
+        <div class="card">
+            <h3>Fee Savings</h3>
+            <div class="value green">${{ "%.2f"|format(s.total_fee_savings) }}</div>
+            <div class="sub">From maker orders</div>
+        </div>
+        <div class="card">
+            <h3>Avg Eff Budget</h3>
+            <div class="value">${{ "%.0f"|format(s.avg_eff_budget) }}</div>
+            <div class="sub">Vol + hour scaled</div>
+        </div>
+        <div class="card">
+            <h3>Available</h3>
+            <div class="value">${{ "%.0f"|format(s.available) }}</div>
+            <div class="sub">of ${{ "%.0f"|format(s.budget) }} budget</div>
+        </div>
+    </div>
+
+    {% if cum_pnl %}
+    <div class="section">
+        <div class="section-header"><h2>Cumulative P&L</h2></div>
+        <div class="chart-container">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <div style="width:10px;height:10px;background:var(--green);border-radius:2px;"></div>
+                <span style="font-size:0.75em;color:var(--text2);">Profitable</span>
+                <div style="width:10px;height:10px;background:var(--red);border-radius:2px;margin-left:12px;"></div>
+                <span style="font-size:0.75em;color:var(--text2);">Underwater</span>
+            </div>
+            <div class="bar-chart" style="height:120px;">
+                {% for pt in cum_pnl %}
+                {% set h = ((pt.cum / max_cum * 100)|int)|abs if max_cum > 0 else 1 %}
+                <div class="bar {{ 'bar-green' if pt.cum >= 0 else 'bar-red' }}"
+                     style="height: {{ h if h > 0 else 1 }}px; flex: 1;"
+                     title="Window #{{ pt.idx }}: ${{ pt.pnl }} -> Cum ${{ pt.cum }}"></div>
+                {% endfor %}
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.7em; color:var(--text2); margin-top:4px;">
+                <span>Window #1</span>
+                <span>Current: <strong class="{{ 'green' if cum_pnl[-1].cum >= 0 else 'red' }}">${{ "%.2f"|format(cum_pnl[-1].cum) }}</strong></span>
+                <span>Window #{{ cum_pnl|length }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="section">
+        <div class="section-header"><h2>Signal Analysis</h2></div>
+        <div class="chart-container">
+            <div class="signal-grid">
+                <div class="signal-item">
+                    <div class="label">Correct + Win</div>
+                    <div class="val green">{{ s.correct_win }}</div>
+                </div>
+                <div class="signal-item">
+                    <div class="label">Correct + Loss (VWAP)</div>
+                    <div class="val yellow">{{ s.correct_loss }}</div>
+                </div>
+                <div class="signal-item">
+                    <div class="label">Wrong Direction</div>
+                    <div class="val red">{{ s.wrong_loss }}</div>
+                </div>
+            </div>
+            <div style="font-size:0.75em; color:var(--text2); margin-top:8px;">
+                Correct+Loss = direction right but VWAP ratio > 1.0 (spread cost exceeds directional edge).
+            </div>
+        </div>
+    </div>
+
+    {% if bn_buckets %}
+    <div class="section">
+        <div class="section-header"><h2>Direction Accuracy by |BN Momentum|</h2></div>
+        <div class="chart-container">
+            {% for b in bn_buckets %}
+            {% if b.total > 0 %}
+            <div class="dist-row">
+                <span class="dist-label">|BN| {{ b.label }}</span>
+                <div style="display:flex; gap:1px; flex:1;">
+                    {% set max_bar = bn_max if bn_max > 0 else 1 %}
+                    <div class="dist-bar" style="width:{{ (b.wins / max_bar * 200)|int }}px; background:var(--green);"></div>
+                    <div class="dist-bar" style="width:{{ (b.losses / max_bar * 200)|int }}px; background:var(--red); opacity:0.6;"></div>
+                </div>
+                <span class="dist-val">{{ b.wins }}W/{{ b.losses }}L</span>
+                <span class="dist-wr {{ 'green' if b.wr > 65 else 'yellow' }}">{{ "%.0f"|format(b.wr) }}%</span>
+                <span class="dist-pnl {{ 'green' if b.pnl >= 0 else 'red' }}">${{ "%.2f"|format(b.pnl) }}</span>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if maker_windows %}
+    <div class="section">
+        <div class="section-header"><h2>Maker Order Performance</h2></div>
+        <div class="chart-container">
+            <div class="grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 12px;">
+                <div class="card" style="margin:0;">
+                    <h3>Maker Fill Rate</h3>
+                    <div class="value blue">{{ "%.1f"|format(s.maker_fill_rate) }}%</div>
+                </div>
+                <div class="card" style="margin:0;">
+                    <h3>Total Fee Savings</h3>
+                    <div class="value green">${{ "%.2f"|format(s.total_fee_savings) }}</div>
+                </div>
+                <div class="card" style="margin:0;">
+                    <h3>Fee Formula</h3>
+                    <div style="font-size:0.7em;color:var(--text2);margin-top:8px;">tok * p * 0.25 * (p(1-p))^2</div>
+                </div>
+            </div>
+            <table>
+                <thead><tr><th>Window</th><th>Trades</th><th>Maker</th><th>Taker</th><th>Maker %</th><th>Fee Saved</th></tr></thead>
+                <tbody>
+                {% for mw in maker_windows[-20:]|reverse %}
+                <tr>
+                    <td style="font-size:0.72em;">{{ mw.slug[-20:] }}</td>
+                    <td>{{ mw.n_trades }}</td>
+                    <td class="blue">{{ mw.maker }}</td>
+                    <td>{{ mw.taker }}</td>
+                    <td>{{ "%.0f"|format(mw.maker_pct) }}%</td>
+                    <td class="green">${{ "%.4f"|format(mw.fee_savings) }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="section">
+        <div class="section-header">
+            <h2>Window Log ({{ windows|length }} windows)</h2>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr>
+                    <th>Time</th><th>Dir</th><th>Won</th><th>#Tr</th>
+                    <th>Spent</th><th>Payout</th><th>P&L</th><th>VWAP</th>
+                    <th>Lean%</th><th>|BN|</th><th>Eff$</th><th>Mk%</th><th>Result</th>
+                </tr></thead>
+                <tbody>
+                {% for w in windows[:100] %}
+                {% set result = 'WIN' if w.pnl_usd > 0 else ('LOSS' if w.won_side else 'PENDING') %}
+                {% set is_correct = w.lean|upper == w.won_side|upper if w.won_side else false %}
+                <tr class="{{ 'trade-win' if result == 'WIN' else 'trade-loss' if result == 'LOSS' else 'trade-pending' }}">
+                    <td style="font-size:0.72em;color:var(--text2);">{{ w.window_start|ts_format }}</td>
+                    <td>{{ w.lean }}</td>
+                    <td>{{ w.won_side or '...' }}</td>
+                    <td>{{ w.n_trades }}</td>
+                    <td>${{ "%.0f"|format(w.total_usd) }}</td>
+                    <td>{{ "$%.0f"|format(w.payout_usd) if w.payout_usd else '-' }}</td>
+                    <td class="{{ 'green' if w.pnl_usd > 0 else 'red' if w.pnl_usd < 0 else '' }}">
+                        ${{ "%.2f"|format(w.pnl_usd) }}
+                    </td>
+                    <td class="{{ 'green' if w.combined_vwap < 1.0 else 'yellow' if w.combined_vwap < 1.05 else 'red' }}">
+                        {{ "%.3f"|format(w.combined_vwap) if w.combined_vwap else '-' }}
+                    </td>
+                    <td>{{ "%.1f"|format(w.lean_strength * 100) }}%</td>
+                    <td>{{ "%.1f"|format(w.max_bn_bps) }}</td>
+                    <td>${{ "%.0f"|format(w.effective_budget) }}</td>
+                    <td>{{ "%.0f"|format(w.maker_pct) if w.maker_pct else '0' }}%</td>
+                    <td>
+                        {% if result == 'WIN' %}<span class="green">WIN</span>
+                        {% elif result == 'LOSS' %}<span class="red">LOSS</span>
+                        {% else %}<span class="yellow">...</span>{% endif %}
+                        {% if not is_correct and w.won_side %}<span class="red" style="font-size:0.65em;"> DIR</span>{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<footer>Polymarket Trading System v2.0</footer>
+</body></html>
+"""
+
 # ──────────────────────────────────────────────────────────────────────
 # Routes
 # ──────────────────────────────────────────────────────────────────────
@@ -793,13 +1166,19 @@ def home():
     bots = load_all_bots()
     g = compute_globals(bots)
     rev = next((b for b in bots if b["id"] == "reversal"), None)
+    v21 = next((b for b in bots if b["id"] == "v21"), None)
+
     cum_pnl = get_cum_pnl(rev)
     max_cum = max((abs(p["cum"]) for p in cum_pnl), default=1)
+
+    v21_cum_pnl = v21.get("v21_cum_pnl", []) if v21 else []
+    v21_max_cum = max((abs(p["cum"]) for p in v21_cum_pnl), default=1)
 
     return render_template_string(HOME_TEMPLATE,
         bots=bots, g=g, active="home",
         now=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        cum_pnl=cum_pnl, max_cum=max_cum)
+        cum_pnl=cum_pnl, max_cum=max_cum,
+        v21_cum_pnl=v21_cum_pnl, v21_max_cum=v21_max_cum)
 
 
 @app.route("/bot/<bot_id>")
@@ -808,6 +1187,21 @@ def bot_detail(bot_id):
     bot = next((b for b in bots if b["id"] == bot_id), None)
     if not bot:
         return "Bot not found", 404
+
+    # V21 has its own template
+    if bot_id == "v21":
+        s = bot["summary"]
+        cum_pnl = bot.get("v21_cum_pnl", [])
+        max_cum = max((abs(p["cum"]) for p in cum_pnl), default=1)
+        bn_buckets = bot.get("v21_bn_buckets", [])
+        bn_max = max((b["total"] for b in bn_buckets), default=1)
+        return render_template_string(V21_TEMPLATE,
+            bot=bot, bots=bots, active=bot_id, s=s,
+            windows=bot.get("v21_windows", []),
+            cum_pnl=cum_pnl, max_cum=max_cum,
+            bn_buckets=bn_buckets, bn_max=bn_max,
+            maker_windows=bot.get("v21_maker_windows", []),
+            now=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     cum_pnl = get_cum_pnl(bot)
     max_cum = max((abs(p["cum"]) for p in cum_pnl), default=1)

@@ -14,6 +14,9 @@ cp "$STATE_DIR/dual_whale_v4_state.json" data/ 2>/dev/null || true
 cp "$STATE_DIR/polymanager_state.json" data/ 2>/dev/null || true
 cp "$STATE_DIR/elon_tweet_bot_state.json" data/ 2>/dev/null || true
 
+echo "Exporting V21 dashboard data..."
+python3 "$(dirname "$0")/export_v21_dashboard.py" 2>/dev/null || true
+
 echo "Committing changes..."
 git add data/
 git commit -m "Update dashboard data $(date +%Y-%m-%d_%H:%M)" 2>/dev/null || echo "No changes to commit"
