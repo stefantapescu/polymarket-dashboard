@@ -17601,7 +17601,7 @@
       "up_ask": 0.09,
       "dn_ask": 0.96,
       "winner": null,
-      "resolved": false,
+      "resolved": true,
       "v_E": {
         "action": "BN_STRONG",
         "dir": "",
@@ -17625,6 +17625,50 @@
         "winner": null,
         "pnl": 0,
         "reason": "|BN|=5.6 > 4.5 (too strong)"
+      }
+    },
+    {
+      "slug": "btc-updown-5m-1771698600",
+      "ws": 1771698600,
+      "bn_strike": 68497.13,
+      "w1_up": 111.4524,
+      "w1_dn": 35.1437,
+      "w1_lean": 0.7603,
+      "w2_up": 244.1177,
+      "w2_dn": 103.1747,
+      "w2_lean": 0.7029,
+      "bn_bps": 4.27,
+      "up_ask": 0.94,
+      "dn_ask": 0.07,
+      "winner": null,
+      "resolved": false,
+      "v_E": {
+        "action": "BN_STRONG",
+        "dir": "",
+        "mode": "reversal",
+        "ask": 0,
+        "cost": 0,
+        "tokens": 0,
+        "bn_bps": 4.27,
+        "winner": null,
+        "pnl": 0,
+        "reason": "|BN|=4.3 > 4.0 (too strong)"
+      },
+      "v_G": {
+        "action": "TRADE",
+        "mode": "reversal",
+        "dir": "Down",
+        "ask": 0.07,
+        "cost": 0.875,
+        "tokens": 12.5,
+        "token_id": "26380280502675705779455426134217459434751969831826504180708939021932154807273",
+        "bn_bps": 4.27,
+        "live": true,
+        "tp_order_id": null,
+        "tp_price": null,
+        "tp_filled": false,
+        "winner": null,
+        "pnl": 0
       }
     }
   ],
@@ -17818,6 +17862,7 @@
     "btc-updown-5m-1771644000",
     "btc-updown-5m-1771628700",
     "btc-updown-5m-1771694100",
+    "btc-updown-5m-1771698600",
     "btc-updown-5m-1771691400",
     "btc-updown-5m-1771696200",
     "btc-updown-5m-1771604700",
@@ -18075,7 +18120,7 @@
       "losses": 92,
       "trades": 98,
       "pnl": -17.343000000000004,
-      "bn_gate": 161,
+      "bn_gate": 162,
       "skips": 5,
       "no_signal": 0
     },
@@ -18098,5 +18143,5 @@
       "bn_gate": 101
     }
   },
-  "updated_at": 1771698540.7545128
+  "updated_at": 1771698841.0847218
 }
