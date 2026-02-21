@@ -17036,8 +17036,8 @@
       "bn_bps": 4.45,
       "up_ask": 0.96,
       "dn_ask": 0.05,
-      "winner": null,
-      "resolved": false,
+      "winner": "Down",
+      "resolved": true,
       "v_E": {
         "action": "BN_STRONG",
         "dir": "",
@@ -17063,8 +17063,8 @@
         "tp_order_id": null,
         "tp_price": null,
         "tp_filled": false,
-        "winner": null,
-        "pnl": 0
+        "winner": "Down",
+        "pnl": 15.719800000000001
       }
     },
     {
@@ -17081,7 +17081,7 @@
       "up_ask": 0.7,
       "dn_ask": 0.3,
       "winner": null,
-      "resolved": false,
+      "resolved": true,
       "v_E": {
         "action": "BN_GATE",
         "dir": "",
@@ -17105,6 +17105,46 @@
         "winner": null,
         "pnl": 0,
         "reason": "|BN|=2.6 < 3.0"
+      }
+    },
+    {
+      "slug": "btc-updown-5m-1771694700",
+      "ws": 1771694700,
+      "bn_strike": 68248.88,
+      "w1_up": 120.1352,
+      "w1_dn": 188.9759,
+      "w1_lean": 0.6114,
+      "w2_up": 179.1298,
+      "w2_dn": 456.7663,
+      "w2_lean": 0.7183,
+      "bn_bps": 9.5,
+      "up_ask": 0.97,
+      "dn_ask": 0.04,
+      "winner": null,
+      "resolved": false,
+      "v_E": {
+        "action": "BN_STRONG",
+        "dir": "",
+        "mode": "reversal",
+        "ask": 0,
+        "cost": 0,
+        "tokens": 0,
+        "bn_bps": 9.5,
+        "winner": null,
+        "pnl": 0,
+        "reason": "|BN|=9.5 > 4.0 (too strong)"
+      },
+      "v_G": {
+        "action": "BN_STRONG",
+        "dir": "",
+        "mode": "reversal",
+        "ask": 0,
+        "cost": 0,
+        "tokens": 0,
+        "bn_bps": 9.5,
+        "winner": null,
+        "pnl": 0,
+        "reason": "|BN|=9.5 > 4.5 (too strong)"
       }
     }
   ],
@@ -17249,6 +17289,7 @@
     "btc-updown-5m-1771605000",
     "btc-updown-5m-1771622700",
     "btc-updown-5m-1771592700",
+    "btc-updown-5m-1771694700",
     "btc-updown-5m-1771595100",
     "btc-updown-5m-1771675500",
     "btc-updown-5m-1771591800",
@@ -17542,7 +17583,7 @@
       "losses": 92,
       "trades": 98,
       "pnl": -17.343000000000004,
-      "bn_gate": 148,
+      "bn_gate": 149,
       "skips": 5,
       "no_signal": 0
     },
@@ -17556,14 +17597,14 @@
       "no_signal": 0
     },
     "G": {
-      "trades": 14,
-      "wins": 0,
+      "trades": 15,
+      "wins": 1,
       "losses": 14,
-      "pnl": -12.2416,
+      "pnl": 3.478200000000001,
       "skips": 1,
       "no_signal": 0,
-      "bn_gate": 88
+      "bn_gate": 89
     }
   },
-  "updated_at": 1771694641.061837
+  "updated_at": 1771694940.609152
 }
