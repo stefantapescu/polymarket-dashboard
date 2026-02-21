@@ -1,28 +1,44 @@
 {
   "mode": "LIVE",
   "started_at": "2026-02-21T05:39:19.630211+00:00",
-  "updated_at": "2026-02-21T10:44:05.320330+00:00",
-  "cycle_count": 3517,
-  "rebalance_count": 293,
-  "total_fills": 0,
-  "alerts": [],
+  "updated_at": "2026-02-21T10:49:16.898206+00:00",
+  "cycle_count": 3577,
+  "rebalance_count": 298,
+  "total_fills": 1,
+  "alerts": [
+    {
+      "time": 1771670924.9758022,
+      "msg": "FILL: Iran Strikes Mar 7 NO 105 shares @ $0.59 ($61.9)",
+      "level": "INFO"
+    },
+    {
+      "time": 1771670924.976607,
+      "msg": "AUTO-FLATTEN: Selling 105 NO on Iran Strikes Mar 7 (skew=100%)",
+      "level": "INFO"
+    },
+    {
+      "time": 1771670925.1257548,
+      "msg": "FLATTENED: Iran Strikes Mar 7 NO sold 105 for $61.95 (loss ~$-0.00)",
+      "level": "INFO"
+    }
+  ],
   "markets": {
     "Iran Strikes Mar 7": {
-      "yes_bid": 0.36,
-      "no_bid": 0.59,
-      "yes_size": 105,
-      "no_size": 105,
-      "yes_order_id": "0xf1f4f1bd720708a32c30dc6d96409d8cee7cbdaa4718b8550fe359eafc71ce2e",
-      "no_order_id": "0x724cd7477fd41432b53a0ea85069041dca115cf320134abe43018b7dcb55a592",
+      "yes_bid": 0.38,
+      "no_bid": 0.58,
+      "yes_size": 104,
+      "no_size": 104,
+      "yes_order_id": "0x7127cab27bc3578e13b7337412fad771ae5853df4526362e3c151886f4bb84f5",
+      "no_order_id": "0x1bfa89f8d14ffb9280122160c6bfc8982fad74a15fc7c8f1da71f26865fd0ac2",
       "yes_filled": 0,
-      "no_filled": 0,
+      "no_filled": 0.0,
       "yes_spent": 0,
-      "no_spent": 0,
+      "no_spent": 0.0,
       "yes_scoring": true,
       "no_scoring": true,
-      "cost": 99.75,
+      "cost": 99.84,
       "reward_rate": 200,
-      "last_update": 1771670146.643049
+      "last_update": 1771670956.1776588
     },
     "Ruzevich IL-06": {
       "yes_bid": 0.07,
@@ -42,5 +58,5 @@
       "last_update": 1771652362.300329
     }
   },
-  "total_deployed": 199.08
+  "total_deployed": 199.17
 }
