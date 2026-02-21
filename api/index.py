@@ -307,6 +307,11 @@ a:hover { text-decoration: underline; }
 .nav-brand { font-weight: 700; color: var(--blue); font-size: 1.1em; }
 .nav a { color: var(--text2); font-size: 0.85em; }
 .nav a:hover, .nav a.active { color: var(--text); }
+.refresh-btn { background: var(--bg3); color: var(--text2); border: 1px solid var(--border);
+               border-radius: 6px; padding: 5px 12px; font-size: 0.78em; cursor: pointer;
+               margin-left: auto; transition: all 0.2s; font-family: inherit; }
+.refresh-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.refresh-btn.spinning { opacity: 0.6; pointer-events: none; }
 .subtitle { color: var(--text2); margin-bottom: 20px; font-size: 0.82em; }
 h1 { font-size: 1.4em; margin-bottom: 4px; }
 h2 { font-size: 1.1em; margin-bottom: 12px; color: var(--text); }
@@ -387,7 +392,15 @@ NAV_HTML = """
     {% for bot in bots %}
     <a href="/bot/{{ bot.id }}" class="{{ 'active' if active == bot.id }}">{{ bot.icon }} {{ bot.name }}</a>
     {% endfor %}
+    <button class="refresh-btn" onclick="doRefresh(this)">Refresh</button>
 </nav>
+<script>
+function doRefresh(btn) {
+    btn.classList.add('spinning');
+    btn.textContent = 'Refreshing...';
+    location.reload();
+}
+</script>
 """
 
 HOME_TEMPLATE = """
