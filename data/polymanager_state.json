@@ -1,9 +1,9 @@
 {
   "mode": "LIVE",
   "started_at": "2026-02-21T05:39:19.630211+00:00",
-  "updated_at": "2026-02-21T13:24:15.064911+00:00",
-  "cycle_count": 5365,
-  "rebalance_count": 447,
+  "updated_at": "2026-02-21T13:29:26.316695+00:00",
+  "cycle_count": 5425,
+  "rebalance_count": 452,
   "total_fills": 1,
   "alerts": [
     {
@@ -25,20 +25,20 @@
   "markets": {
     "Iran Strikes Mar 7": {
       "yes_bid": 0.36,
-      "no_bid": 0.6,
-      "yes_size": 104,
-      "no_size": 104,
-      "yes_order_id": "0x6fe5063775937ca837a313f432c757656b2e9dca0d126322365e5163d198107e",
-      "no_order_id": "0x745407dd8d8ea37fc9b36aceabf3192668d9181927b38e1c4df4c99b6b606437",
+      "no_bid": 0.59,
+      "yes_size": 105,
+      "no_size": 105,
+      "yes_order_id": "0xa7825fa29a6f46f22eba29cf038ed53084ce74d367e7a51ab0e7f70b88d3cc32",
+      "no_order_id": "0x4d97a8aeb44dfeb82118a6c2c8961701e6d67e5bbc91c568a4103c0959b1f8bd",
       "yes_filled": 0,
       "no_filled": 0.0,
       "yes_spent": 0,
       "no_spent": 0.0,
       "yes_scoring": true,
       "no_scoring": true,
-      "cost": 99.84,
+      "cost": 99.75,
       "reward_rate": 200,
-      "last_update": 1771680066.887199
+      "last_update": 1771680316.592107
     },
     "Ruzevich IL-06": {
       "yes_bid": 0.07,
@@ -58,5 +58,5 @@
       "last_update": 1771652362.300329
     }
   },
-  "total_deployed": 199.17
+  "total_deployed": 199.08
 }
