@@ -13924,8 +13924,8 @@
       "bn_bps": 6.81,
       "up_ask": 0.0,
       "dn_ask": 0.01,
-      "winner": null,
-      "resolved": false,
+      "winner": "Up",
+      "resolved": true,
       "v_E": {
         "action": "TRADE",
         "mode": "reversal",
@@ -13935,8 +13935,8 @@
         "tokens": 50.0,
         "bn_bps": 6.81,
         "live": true,
-        "winner": null,
-        "pnl": 0
+        "winner": "Up",
+        "pnl": -0.5
       },
       "v_G": {
         "action": "BN_STRONG",
@@ -13949,6 +13949,46 @@
         "winner": null,
         "pnl": 0,
         "reason": "|BN|=6.8 > 4.5 (too strong)"
+      }
+    },
+    {
+      "slug": "btc-updown-5m-1771672200",
+      "ws": 1771672200,
+      "bn_strike": 68264.5,
+      "w1_up": 162.1696,
+      "w1_dn": 317.436,
+      "w1_lean": 0.6619,
+      "w2_up": 119.1738,
+      "w2_dn": 481.6458,
+      "w2_lean": 0.8016,
+      "bn_bps": -2.03,
+      "up_ask": 0.51,
+      "dn_ask": 0.5,
+      "winner": null,
+      "resolved": false,
+      "v_E": {
+        "action": "BN_GATE",
+        "dir": "",
+        "mode": "reversal",
+        "ask": 0,
+        "cost": 0,
+        "tokens": 0,
+        "bn_bps": -2.03,
+        "winner": null,
+        "pnl": 0,
+        "reason": "|BN|=2.0 < 3.0"
+      },
+      "v_G": {
+        "action": "BN_GATE",
+        "dir": "",
+        "mode": "reversal",
+        "ask": 0,
+        "cost": 0,
+        "tokens": 0,
+        "bn_bps": -2.03,
+        "winner": null,
+        "pnl": 0,
+        "reason": "|BN|=2.0 < 3.0"
       }
     }
   ],
@@ -14016,6 +14056,7 @@
     "btc-updown-5m-1771585500",
     "btc-updown-5m-1771668000",
     "btc-updown-5m-1771595100",
+    "btc-updown-5m-1771672200",
     "btc-updown-5m-1771583700",
     "btc-updown-5m-1771614300",
     "btc-updown-5m-1771606200",
@@ -14308,10 +14349,10 @@
     },
     "E": {
       "wins": 6,
-      "losses": 62,
-      "trades": 68,
-      "pnl": 6.752299999999997,
-      "bn_gate": 102,
+      "losses": 63,
+      "trades": 69,
+      "pnl": 6.252299999999997,
+      "bn_gate": 103,
       "skips": 5,
       "no_signal": 0
     },
@@ -14331,8 +14372,8 @@
       "pnl": -1.9,
       "skips": 1,
       "no_signal": 0,
-      "bn_gate": 26
+      "bn_gate": 27
     }
   },
-  "updated_at": 1771672140.9681149
+  "updated_at": 1771672440.7097979
 }
