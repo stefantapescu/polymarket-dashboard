@@ -15934,6 +15934,54 @@
         "pnl": 0,
         "reason": "|BN|=5.5 > 4.5 (too strong)"
       }
+    },
+    {
+      "slug": "btc-updown-5m-1771686300",
+      "ws": 1771686300,
+      "bn_strike": 68440.3,
+      "w1_up": 52.5378,
+      "w1_dn": 26.9833,
+      "w1_lean": 0.6607,
+      "w2_up": 109.3955,
+      "w2_dn": 263.0646,
+      "w2_lean": 0.7063,
+      "bn_bps": 4.07,
+      "up_ask": 0.94,
+      "dn_ask": 0.08,
+      "winner": null,
+      "resolved": false,
+      "v_E": {
+        "action": "TRADE",
+        "mode": "reversal",
+        "dir": "Down",
+        "ask": 0.08,
+        "cost": 0.8896,
+        "tokens": 11.12,
+        "token_id": "80757596123856628012546411174105691347291605290871718535035741806947867127516",
+        "bn_bps": 4.07,
+        "live": true,
+        "tp_order_id": null,
+        "tp_price": null,
+        "tp_filled": false,
+        "winner": null,
+        "pnl": 0
+      },
+      "v_G": {
+        "action": "TRADE",
+        "mode": "reversal",
+        "dir": "Down",
+        "ask": 0.08,
+        "cost": 0.8896,
+        "tokens": 11.12,
+        "token_id": "80757596123856628012546411174105691347291605290871718535035741806947867127516",
+        "bn_bps": 4.07,
+        "live": true,
+        "tp_order_id": null,
+        "tp_price": null,
+        "tp_filled": false,
+        "winner": null,
+        "pnl": 0
+      }
     }
   ],
   "seen": [
@@ -15942,6 +15990,7 @@
     "btc-updown-5m-1771626300",
     "btc-updown-5m-1771668900",
     "btc-updown-5m-1771634400",
+    "btc-updown-5m-1771686300",
     "btc-updown-5m-1771669800",
     "btc-updown-5m-1771675500",
     "btc-updown-5m-1771620300",
@@ -16365,5 +16414,5 @@
       "bn_gate": 66
     }
   },
-  "updated_at": 1771686240.906694
+  "updated_at": 1771686542.176238
 }
